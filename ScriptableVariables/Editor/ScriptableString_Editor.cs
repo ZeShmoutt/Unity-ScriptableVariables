@@ -11,29 +11,9 @@ namespace ScriptableVariablesEditor
 	[CustomPropertyDrawer(typeof(ScriptableString))]
 	public class ScriptableString_Drawer : ScriptableVariable_Drawer<string>
 	{
-		protected override void DrawValueField(Rect position, SerializedProperty property)
+		protected override void DrawValueWhenNull(Rect position)
 		{
-			ScriptableString valueProp = (ScriptableString)property.objectReferenceValue;
-
-			if (valueProp != null)
-			{
-				if (valueProp.AllowExternalControl)
-				{
-					valueProp.Value = EditorGUI.TextField(position, GUIContent.none, valueProp.Value);
-				}
-				else
-				{
-					GUI.enabled = false;
-					EditorGUI.TextField(position, GUIContent.none, valueProp.Value);
-					GUI.enabled = true;
-				}
-			}
-			else
-			{
-				GUI.enabled = false;
-				EditorGUI.LabelField(position, GUIContent.none, new GUIContent(default(string)));
-				GUI.enabled = true;
-			}
+			EditorGUI.LabelField(position, GUIContent.none, new GUIContent(default(string)));
 		}
 	}
 }

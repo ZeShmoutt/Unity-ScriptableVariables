@@ -11,29 +11,9 @@ namespace ScriptableVariablesEditor
 	[CustomPropertyDrawer(typeof(ScriptableFloat))]
 	public class ScriptableFloat_Drawer : ScriptableVariable_Drawer<float>
 	{
-		protected override void DrawValueField(Rect position, SerializedProperty property)
+		protected override void DrawValueWhenNull(Rect position)
 		{
-			ScriptableFloat valueProp = (ScriptableFloat)property.objectReferenceValue;
-
-			if (valueProp != null)
-			{
-				if (valueProp.AllowExternalControl)
-				{
-					valueProp.Value = EditorGUI.FloatField(position, GUIContent.none, valueProp.Value);
-				}
-				else
-				{
-					GUI.enabled = false;
-					EditorGUI.FloatField(position, GUIContent.none, valueProp.Value);
-					GUI.enabled = true;
-				}
-			}
-			else
-			{
-				GUI.enabled = false;
-				EditorGUI.LabelField(position, GUIContent.none, new GUIContent(default(float).ToString()));
-				GUI.enabled = true;
-			}
+			EditorGUI.LabelField(position, GUIContent.none, new GUIContent(default(float).ToString()));
 		}
-	} 
+	}
 }

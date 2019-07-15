@@ -57,18 +57,44 @@ namespace ScriptableVariablesEditor
 			Rect valueRect = new Rect(position.x, position.y, halfWidth - 5f, position.height);
 			Rect objectRect = new Rect(position.x + halfWidth + 5f, position.y, halfWidth - 5f, position.height);
 
-			DrawValueField(valueRect, property);
 			DrawObjectField(objectRect, property);
+			DrawValueField(valueRect, property);
 		}
 
 		protected virtual void DrawValueField(Rect position, SerializedProperty property)
 		{
-			// Alan please add override code
+			ScriptableVariable<T> scriptableObject = (ScriptableVariable<T>)property.objectReferenceValue;
+
+			if (scriptableObject != null)
+			{
+				SerializedObject ser = new SerializedObject(scriptableObject);
+				SerializedProperty prop = ser.FindProperty("value");
+
+				GUI.enabled = scriptableObject.AllowExternalControl;
+				DrawValueWhenNotNull(position, prop);
+				GUI.enabled = true;
+			}
+			else
+			{
+				GUI.enabled = false;
+				DrawValueWhenNull(position);
+				GUI.enabled = true;
+			}
 		}
 
 		protected virtual void DrawObjectField(Rect position, SerializedProperty property)
 		{
 			EditorGUI.PropertyField(position, property, GUIContent.none);
+		}
+
+		protected virtual void DrawValueWhenNotNull(Rect position, SerializedProperty prop)
+		{
+			EditorGUI.PropertyField(position, prop, GUIContent.none);
+		}
+
+		protected virtual void DrawValueWhenNull(Rect position)
+		{
+			EditorGUI.LabelField(position, GUIContent.none, new GUIContent("None"));
 		}
 	}
 }
