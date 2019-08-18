@@ -77,7 +77,7 @@ namespace ZeShmouttsAssets.DataContainers.EditorScripts
 		/// </summary>
 		protected virtual void DrawValueWhenNull(Rect position)
 		{
-			EditorGUI.LabelField(position, GUIContent.none, new GUIContent("None"));
+			EditorGUI.LabelField(position, GUIContent.none, new GUIContent(string.Format("None ({0})", typeof(T).Name)));
 		}
 
 		#endregion
