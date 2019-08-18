@@ -2,6 +2,12 @@
 
 A way of storing common types as references in your assets.
 
+## Uses and restrictions
+
+As per the MIT license, this is pretty much unrestricted in use and modification.
+
+I'd appreciate a lot if you could mention me somewhere if you use it, though.
+
 ## How to create a ScriptableVariable
 
 As usual with ScriptableObjects :
@@ -27,7 +33,7 @@ On top of that, ScriptableVariables use a runtime value, that can be safely modi
 
 ## How to create additional ScriptableVariable subtypes
 
-Copy any of the existing subtypes, and change the generic type and whatever else you want. As an example, a custom ScriptableTexture substype :
+Copy any of the existing subtypes, and change the generic type and whatever else you want. As an example, a custom ScriptableTexture subtype created from a copy of the ScriptableString :
 
     using UnityEngine;
 
@@ -40,7 +46,7 @@ Copy any of the existing subtypes, and change the generic type and whatever else
         } 
     }
     
-That's it. All the features of the base version, by changing exactly 4 words from "String" to "Texture".
+That's it. All the features of the base version, by replacing exactly 4 words from "String" to "Texture".
 
 Optionally, you can also duplicate the corresponding Editor script to get that fancy inspector and property drawer.
 
