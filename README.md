@@ -26,8 +26,9 @@ As usual with ScriptableObjects :
 This version of ScriptableVariables has been made with seamless integration in mind, so :
 
 * ScriptableVariables are affected by operators just like the type they represent : `1 + ScriptableFloatOfValue4` would result in 5 as if you directly did `1 + 4`.
-* The `ScriptableVariable.ToString()` method is actually a shortcut for `ScriptableVariable.value.ToString()`.
+* The `ScriptableVariable<T>.ToString()` method is actually a shortcut for `ScriptableVariable<T>.value.ToString()`.
 * The `ScriptableGradient` subtype has a shortcut for `Evaluate()`.
+* **IMPORTANT :** While `if(ScriptableBool)` is usually interpreted as `if the ScriptableBool object exists`, due to the implicit conversion it will be interpreted as `if the ScriptableBool's value is true`. **This is fully intentional** (and it will also return false properly if the ScriptableBool object doesn't exist) - however it means that you can't distinguish between `the ScriptableBool object doesn't exist` and `the ScriptableBool's value is false`. I can't think of a case where the distinction might be important considering how ScriptableVariables are intended to be used, but keep that in mind anyway, okay ?
 
 On top of that, ScriptableVariables use a runtime value, that can be safely modified without touching the original value set in the editor. The original value itself is pretty much inaccessible anyway.
 
@@ -75,7 +76,7 @@ Optionally, you can also duplicate the corresponding Editor script to get that f
 		}
 	}
 
-Note the `DrawValueWhenNull()` method : this is the shortcut field drawn by the property drawer when there's no ScriptableVariable assigned to get a value from. The base version displays a label field with a dynamic type :
+Note the `DrawValueWhenNull()` method : this is the shortcut field drawn by the property drawer when there's no ScriptableVariable assigned to get a value from. The base version from `ScriptableVariable<T>` displays a label field with a dynamic type :
 
 	EditorGUI.LabelField(position, GUIContent.none, new GUIContent(string.Format("None ({0})", typeof(T).Name)));
 
