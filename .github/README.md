@@ -8,6 +8,12 @@ As per the MIT license, this is pretty much unrestricted in use and modification
 
 I'd appreciate a lot if you could mention me somewhere if you use it, though.
 
+## Why would I need to store variables in ScriptableObjects ?
+
+This git is essentially my implementation of the talk [*Game Architecture with Scriptable Objects*](https://www.youtube.com/watch?v=raQ3iHhE_Kk) by Ryan Hipple, so I highly recommend to watch it to fully understand.
+
+In short, it's about modularity.
+
 ## How to create a ScriptableVariable
 
 As usual with ScriptableObjects :
