@@ -1,0 +1,19 @@
+{
+    "name": "Unity Scriptable Variables (Editor)",
+    "references": [
+        "GUID:e93819b4883485e4987a4a4d10db33ba"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "UNITY_2018_4_OR_NEWER"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
