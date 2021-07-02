@@ -13,17 +13,19 @@ namespace ZeShmouttsAssets.DataContainers
 		/// <summary>
 		/// Is this ScriptableVariable read only ?
 		/// </summary>
-		[SerializeField] protected bool readOnly = false;
+		[UnityEngine.Serialization.FormerlySerializedAs("readOnly")]
+		[SerializeField] protected bool m_readOnly = false;
 
 		/// <summary>
 		/// Base value. Will be kept in during runtime in case the ScriptableVariable needs to reset.
 		/// </summary>
-		[SerializeField] protected T value;
+		[UnityEngine.Serialization.FormerlySerializedAs("value")]
+		[SerializeField] protected T m_valueBase;
 
 		/// <summary>
 		/// Value used only at runtime. Can be safely modified as it isn't serialized.
 		/// </summary>
-		[System.NonSerialized] protected T runtimeValue;
+		[System.NonSerialized] protected T m_valueRuntime;
 
 		public void OnAfterDeserialize()
 		{
@@ -53,7 +55,7 @@ namespace ZeShmouttsAssets.DataContainers
 		/// </summary>
 		public bool IsReadOnly
 		{
-			get { return readOnly; }
+			get { return m_readOnly; }
 		}
 
 		/// <summary>
@@ -61,7 +63,7 @@ namespace ZeShmouttsAssets.DataContainers
 		/// </summary>
 		public virtual void Reset()
 		{
-			runtimeValue = value;
+			m_valueRuntime = m_valueBase;
 		}
 
 		#endregion
@@ -71,18 +73,18 @@ namespace ZeShmouttsAssets.DataContainers
 		/// <summary>
 		/// Returns the stored value of a ScriptableVariable if it exists, or a default value of the corresponding type otherwise.
 		/// </summary>
-		/// <param name="target"></param>
+		/// <param name="_target"></param>
 		/// <returns></returns>
-		protected static T GetValueOrDefault(ScriptableVariable<T> target)
+		protected static T GetValueOrDefault(ScriptableVariable<T> _target)
 		{
-			if (target != null)
+			if (_target != null)
 			{
-				return target.GetValue();
+				return _target.GetValue();
 			}
 			else
 			{
-				Debug.LogWarningFormat("A ScriptableVariable of type {0} has not been assigned, default value \"{1}\" has been used instead.", typeof(T).Name, default(T).ToString());
-				return default(T);
+				Debug.LogWarning($"A ScriptableVariable of type {typeof(T).Name} has not been assigned, default value \"{default(T).ToString()}\" has been used instead.");
+				return default;
 			}
 		}
 
@@ -92,32 +94,32 @@ namespace ZeShmouttsAssets.DataContainers
 		/// <returns>Returns the stored value.</returns>
 		protected virtual T GetValue()
 		{
-			return runtimeValue;
+			return m_valueRuntime;
 		}
 
 		/// <summary>
 		/// Tries to modify the ScriptableVariable's stored value. Will throw an error if the ScriptableVariable is read only.
 		/// </summary>
-		/// <param name="value">New value to assign to the ScriptableVariable.</param>
-		protected void TrySetValue(T value)
+		/// <param name="_value">New value to assign to the ScriptableVariable.</param>
+		protected void TrySetValue(T _value)
 		{
-			if (readOnly)
+			if (!m_readOnly)
 			{
-				SetValue(value);
+				SetValue(_value);
 			}
 			else
 			{
-				throw new System.FieldAccessException(string.Format("The ScriptableVariable \"{0}\" ({1}) is read only.", this.name, typeof(T).Name));
+				throw new System.FieldAccessException($"The ScriptableVariable \"{this.name}\" ({typeof(T).Name}) is read only.");
 			}
 		}
 
 		/// <summary>
 		/// Assign a new value to the ScriptableVariable. This will modify the non-serialized runtime value only.
 		/// </summary>
-		/// <param name="value">New value to assign.</param>
-		protected virtual void SetValue(T value)
+		/// <param name="_value">New value to assign.</param>
+		protected virtual void SetValue(T _value)
 		{
-			this.runtimeValue = value;
+			this.m_valueRuntime = _value;
 		}
 
 		#endregion
@@ -136,29 +138,11 @@ namespace ZeShmouttsAssets.DataContainers
 		/// <summary>
 		/// Implicit conversion to whatever type the variable is, for seamless integration.
 		/// </summary>
-		public static implicit operator T(ScriptableVariable<T> s)
+		public static implicit operator T(ScriptableVariable<T> _s)
 		{
-			return GetValueOrDefault(s);
+			return GetValueOrDefault(_s);
 		}
 
 		#endregion
 	}
 }
-
-#if UNITY_EDITOR
-
-namespace ZeShmouttsAssets.DataContainers.EditorScripts
-{
-	/// <summary>
-	/// Editor constants used for ScriptableVariable editor stuff.
-	/// </summary>
-	public static class EditorConstants
-	{
-		/// <summary>
-		/// Base menu path for creating ScriptableVariables in the editor.
-		/// </summary>
-		public const string MenuNamePath = "ZeShmoutt's Assets/Data Containers/Scriptable Variables/";
-	}
-}
-
-#endif

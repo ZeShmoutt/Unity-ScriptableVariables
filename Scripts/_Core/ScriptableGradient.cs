@@ -2,7 +2,7 @@
 
 namespace ZeShmouttsAssets.DataContainers
 {
-	[CreateAssetMenu(menuName = EditorScripts.EditorConstants.MenuNamePath + "Gradient", fileName = "New Gradient")]
+	[CreateAssetMenu(menuName = EditorScripts.MenuPathConstants.MENU_NAME_PATH + "Gradient", fileName = "New Gradient")]
 	public class ScriptableGradient : ScriptableVariable<Gradient>
 	{
 		#region Utility
@@ -10,11 +10,11 @@ namespace ZeShmouttsAssets.DataContainers
 		/// <summary>
 		/// Calculate color at a given time.
 		/// </summary>
-		/// <param name="time">Time of the key (0 - 1).</param>
+		/// <param name="_time">Time of the key (0 - 1).</param>
 		/// <returns>Returns a Color.</returns>
-		public Color Evaluate(float time)
+		public Color Evaluate(float _time)
 		{
-			return GetValueOrDefault(this).Evaluate(time);
+			return GetValueOrDefault(this).Evaluate(_time);
 		}
 
 		#endregion

@@ -2,7 +2,7 @@
 
 namespace ZeShmouttsAssets.DataContainers
 {
-	[CreateAssetMenu(menuName = EditorScripts.EditorConstants.MenuNamePath + "Int", fileName = "New Int")]
+	[CreateAssetMenu(menuName = EditorScripts.MenuPathConstants.MENU_NAME_PATH + "Int", fileName = "New Int")]
 	public class ScriptableInt : ScriptableVariable<int>
 	{
 		// No changes needed.

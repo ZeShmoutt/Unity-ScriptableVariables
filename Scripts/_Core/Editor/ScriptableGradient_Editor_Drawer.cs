@@ -6,7 +6,14 @@ namespace ZeShmouttsAssets.DataContainers.EditorScripts
 	[CustomEditor(typeof(ScriptableGradient))]
 	public class ScriptableGradient_Editor : ScriptableVariable_Editor<Gradient>
 	{
-		// No changes needed.
+		#region Type-specific parts
+
+		protected override void DrawRuntimeValueField(Gradient _value, string _label)
+		{
+			EditorGUILayout.GradientField(_label, _value);
+		}
+
+		#endregion
 	}
 
 	[CustomPropertyDrawer(typeof(ScriptableGradient))]
@@ -14,9 +21,9 @@ namespace ZeShmouttsAssets.DataContainers.EditorScripts
 	{
 		#region Type-specific parts
 
-		protected override void DrawValueWhenNull(Rect position)
+		protected override void DrawValueWhenNull(Rect _position)
 		{
-			EditorGUI.GradientField(position, GUIContent.none, new Gradient());
+			EditorGUI.GradientField(_position, GUIContent.none, new Gradient());
 		}
 
 		#endregion

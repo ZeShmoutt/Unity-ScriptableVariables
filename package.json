@@ -1,7 +1,7 @@
 {
 	"name": "com.zeshmouttsassets.unityscriptablevariables",
 	"displayName":"Unity Scriptable Variables",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"unity": "2018.4",
 	"unityRelease": "15f1",
 	"description": "Assign your variables into ScriptableObjects for easier handling.",

@@ -14,9 +14,9 @@ namespace ZeShmouttsAssets.DataContainers.EditorScripts
 	{
 		#region Type-specific parts
 
-		protected override void DrawValueWhenNull(Rect position)
+		protected override void DrawValueWhenNull(Rect _position)
 		{
-			EditorGUI.LabelField(position, GUIContent.none, new GUIContent(default(float).ToString()));
+			EditorGUI.LabelField(_position, GUIContent.none, new GUIContent(default(float).ToString()));
 		}
 
 		#endregion

@@ -6,7 +6,14 @@ namespace ZeShmouttsAssets.DataContainers.EditorScripts
 	[CustomEditor(typeof(ScriptableBool))]
 	public class ScriptableBool_Editor : ScriptableVariable_Editor<bool>
 	{
-		// No changes needed.
+		#region Type-specific parts
+
+		protected override void DrawRuntimeValueField(bool _value, string _label)
+		{
+			EditorGUILayout.Toggle(_label, _value);
+		}
+
+		#endregion
 	}
 
 	[CustomPropertyDrawer(typeof(ScriptableBool))]
@@ -14,9 +21,9 @@ namespace ZeShmouttsAssets.DataContainers.EditorScripts
 	{
 		#region Type-specific parts
 
-		protected override void DrawValueWhenNull(Rect position)
+		protected override void DrawValueWhenNull(Rect _position)
 		{
-			EditorGUI.Toggle(position, GUIContent.none, default(bool));
+			EditorGUI.Toggle(_position, GUIContent.none, default);
 		}
 
 		#endregion

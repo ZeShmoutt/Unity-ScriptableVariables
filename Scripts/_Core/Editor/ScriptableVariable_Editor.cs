@@ -12,10 +12,10 @@ namespace ZeShmouttsAssets.DataContainers.EditorScripts
 	{
 		#region Variables
 
-		SerializedProperty scriptProp;
-
-		SerializedProperty valueProp;
-		SerializedProperty readonlyProp;
+		private SerializedProperty scriptProp;
+		private SerializedProperty valueProp;
+		private SerializedProperty runtimeValueProp;
+		private SerializedProperty readonlyProp;
 
 		#endregion
 
@@ -23,10 +23,11 @@ namespace ZeShmouttsAssets.DataContainers.EditorScripts
 
 		private void OnEnable()
 		{
-			scriptProp = serializedObject.FindProperty("m_Script");
+			scriptProp = serializedObject.FindProperty(EditorConstants.FIELD_SCRIPT);
 
-			valueProp = serializedObject.FindProperty("value");
-			readonlyProp = serializedObject.FindProperty("readOnly");
+			valueProp = serializedObject.FindProperty(EditorConstants.FIELD_VALUE_BASE);
+			runtimeValueProp = serializedObject.FindProperty(EditorConstants.FIELD_VALUE_RUNTIME);
+			readonlyProp = serializedObject.FindProperty(EditorConstants.FIELD_READ_ONLY);
 		}
 
 		public override void OnInspectorGUI()
@@ -44,8 +45,8 @@ namespace ZeShmouttsAssets.DataContainers.EditorScripts
 
 			EditorGUILayout.LabelField("Value", EditorStyles.boldLabel);
 			EditorGUILayout.BeginVertical(GUI.skin.box);
-			DrawValueField();
-			DrawRuntimeValueField();
+			DrawBaseValueField();
+			DrawRuntimeValueFieldInternal();
 			EditorGUILayout.EndVertical();
 
 			if (GUI.changed)
@@ -101,36 +102,50 @@ namespace ZeShmouttsAssets.DataContainers.EditorScripts
 		#region Type-specific parts
 
 		/// <summary>
-		/// Draws the value field like the regular inspector.
+		/// Draws the base value field.
 		/// </summary>
-		protected virtual void DrawValueField()
+		protected virtual void DrawBaseValueField()
 		{
-			EditorGUILayout.PropertyField(valueProp);
+			EditorGUILayout.PropertyField(valueProp, new GUIContent("Base value"));
 		}
 
 		/// <summary>
-		/// Draws the runtime value field like the regular inspector when in play mode, or a warning label when not playing.
+		/// Internal method for drawing the runtime value field when in play mode, or a warning label when not playing.
 		/// </summary>
-		protected virtual void DrawRuntimeValueField()
+		private void DrawRuntimeValueFieldInternal()
 		{
 			if (EditorApplication.isPlaying)
 			{
 				ScriptableVariable<T> obj = serializedObject.targetObject as ScriptableVariable<T>;
 
 				BindingFlags bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
-				FieldInfo field = typeof(ScriptableVariable<T>).GetField("runtimeValue", bindFlags);
+				FieldInfo field = typeof(ScriptableVariable<T>).GetField(EditorConstants.FIELD_VALUE_RUNTIME, bindFlags);
 
-				T runtime = (T)field.GetValue(obj);
+				T runtimeValue = (T)field.GetValue(obj);
 
-				bool wasEnabled = GUI.enabled;
-
-				GUI.enabled = false;
-				EditorGUILayout.LabelField("Runtime value", runtime.ToString());
-				GUI.enabled = wasEnabled;
+				using (new EditorGUI.DisabledScope(true))
+				{
+					DrawRuntimeValueField(runtimeValue, "Runtime value");
+				}
 			}
 			else
 			{
 				EditorGUILayout.HelpBox("The runtime value will be visible in play mode.", MessageType.Info);
+			}
+		}
+
+		/// <summary>
+		/// Draws the runtime value field while playing.
+		/// </summary>
+		protected virtual void DrawRuntimeValueField(T _value, string _label)
+		{
+			if (_value is Object)
+			{
+				EditorGUILayout.ObjectField(_label, _value as Object, typeof(Object), false);
+			}
+			else
+			{
+				EditorGUILayout.LabelField(_label, _value.ToString());
 			}
 		}
 
